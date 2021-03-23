@@ -1,0 +1,23 @@
+{
+  "name": "path-follower",
+  "version": "1.0.0",
+  "description": "Path follower with tsc and postgresql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alejo Lovallo",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.2.3"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlejoLovallo/tsc_path_follower.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlejoLovallo/tsc_path_follower/issues"
+  },
+  "homepage": "https://github.com/AlejoLovallo/tsc_path_follower#readme"
+}
