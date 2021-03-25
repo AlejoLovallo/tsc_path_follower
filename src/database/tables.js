@@ -1,8 +1,8 @@
-const userBoundaries = require('./boundaries/user');
-const universityBoundaries = require('./boundaries/university');
-const subjectBoundaries = require('./boundaries/subject');
-const careerBoundaries = require('./boundaries/career');
-const userSubjectNotesBoundaries = require('./boundaries/user_subject_notes');
+const userBoundaries = require('./tables_format/user');
+const universityBoundaries = require('./tables_format/university');
+const subjectBoundaries = require('./tables_format/subject');
+const careerBoundaries = require('./tables_format/career');
+const userSubjectNotesBoundaries = require('./tables_format/user_subject_notes');
 
 module.exports = {
     universities:{
@@ -11,30 +11,29 @@ module.exports = {
         web: {      type: 'string', lengths:  universityBoundaries.lengths.web, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
         mail: {     type: 'string', lengths: universityBoundaries.lengths.mail, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
         phone: {    type: 'string', lengths:universityBoundaries.lengths.phone, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
-        logo: {     type: 'string', sizes: universityBoundaries.sizes.logo, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
+        logo: {     type: 'string', sizes: universityBoundaries.lengths.logo, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
     },
     careers:{
         id:{            type:'serial',primaryKey:true,couldBeNullInDB:false,couldBeUndefinedAtCreate:false},
         name:{          type:'string',lengths:careerBoundaries.lengths.name,couldBeUndefinedAtCreate:false,couldBeNullInDB:false},
         university:{    type:'string', referenceTable: 'universities', lengths: careerBoundaries.lengths.university, couldBeNullInDB: true, couldBeUndefinedAtCreate: false},
         years: {        type:'string', lengths: careerBoundaries.lengths.years, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
+        subjects: {     type:'string', lengths: careerBoundaries.lengths.subjects, couldBeUndefinedAtCreate: true, couldBeNullInDB:true},
     },
     subjects:{
         id: {           type:'serial', primaryKey: true, couldBeNullInDB:false,couldBeUndefinedAtCreate:false},
         careeer: {      type:'string', referenceTable: 'careers', lengths: subjectBoundaries.lengths.careeer, couldBeNullInDB: true, couldBeUndefinedAtCreate: false},
         name:{          type:'string',lengths:subjectBoundaries.lengths.name,couldBeUndefinedAtCreate:false,couldBeNullInDB:false},
-        term:{          type:'string', lengths: careerBoundaries.lengths.term, couldBeUndefinedAtCreate:true, couldBeNullInDB:true },
+        term:{          type:'string', definedValues: subjectBoundaries.enums.term, definedValues:subjectBoundaries.errors.termNotExist, couldBeUndefinedAtCreate:true, couldBeNullInDB:true },
         is_mandatory:{  type:'boolean', couldBeNullInDB:true, couldBeUndefinedAtCreate: true},
-        year: {         type:'string', lengths: careerBoundaries.lengths.year, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
+        year: {         type:'string', lengths: subjectBoundaries.lengths.year, couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
     },
     users:{
-        id: {           type: 'string', lengths:       userBoundaries.lengths.id, primaryKey: true, couldBeUndefinedAtCreate:false, couldBeNullInDB:true},
-        name: {         type: 'string', lengths:     userBoundaries.lengths.name, couldBeUndefinedAtCreate:false, couldBeNullInDB:true},
-        surname: {      type: 'string', lengths:  userBoundaries.lengths.surname, couldBeUndefinedAtCreate:false, couldBeNullInDB:true},
+        name: {           type: 'string', lengths:       userBoundaries.lengths.id, primaryKey: true, couldBeUndefinedAtCreate:false, couldBeNullInDB:true},
         password: {     type: 'string', lengths: userBoundaries.lengths.password, couldBeUndefinedAtCreate:false, couldBeNullInDB:true},
         set_password: { type: 'boolean', couldBeUndefinedAtCreate:true, couldBeNullInDB:true},
-        role: {         type: 'string', couldBeNulleable: false, definedValues: constants.users.roles, valueNotMatchValuesError: errors.users.roleNotExist},
-        phone: {        type: 'string', lengths: lengths.users.phone, couldBeUndefinedAtCreate: true, couldBeNullInDB:true},
+        role: {         type: 'string', couldBeNulleable: false, definedValues: userBoundaries.enums.role, valueNotMatchValuesError: userBoundaries.errors.roleNotExist},
+        phone: {        type: 'string', lengths: userBoundaries.lengths.phone, couldBeUndefinedAtCreate: true, couldBeNullInDB:true},
     },
     user_subject_notes:{
         user_id: {                                  type: 'string', referenceTable: 'users',   primaryKey:true, couldBeUndefinedAtCreate: false, couldBeNullInDB: false},
@@ -48,8 +47,3 @@ module.exports = {
         final_note: {                               type: 'string', lengths: userSubjectNotesBoundaries.lengths.first_partial_note, couldBeNullInDB:true, couldBeUndefinedAtCreate: true},
     },
 }
-
-/**
- * Key table: user_notes
- * Referencia al usuario y la materia 
- */
