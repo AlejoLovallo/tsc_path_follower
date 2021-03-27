@@ -123,5 +123,9 @@ export default class Postgres {
         }
         await this.createViews()
     }
+
+    close(){
+        this.client.end();
+    }
     views=[];
 }
