@@ -26,26 +26,42 @@ interface isUser{
 
 export default class User implements isUser{
     
+    public static table:string = 'users';
     private name:string;
     private password:string;
     private set_password:boolean;
     private role:Role;
     private phone:string;
 
-    constructor(){
-
+    constructor(userData){
+        /**
+         * TODO: HANDLE DATA RECIEVED
+         */
+        this.name = userData.name;
+        this.password = userData.password ? userData.password : '';
+        this.set_password = userData.set_password ? userData.set_password : false;
+        this.role = userData.role ? userData.role: Role.STUDENT;
+        this.phone = userData.phone ? userData.phone : '';
     }
 
-    public static getById(user_name:string){
-
+    /** ----- GETTERS ------*/
+    getName():string{
+        return this.name;
+    }
+    getRole():string{
+        return this.role.toString();
+    }
+    getPhone():string{
+        return this.phone;
+    }
+    hasSetPassword():boolean{
+        return this.set_password;
     }
 
-    public getName():string{
-
-    }
-
-    public getRole():string{
-
-    }
+    /** ----- SETTERS ------- **/
+    setName:(string)=>string;
+    setRole:(Role)=>string;
+    setPassword:(string)=>boolean;
+    setPhone:(string)=>string;
 
 }

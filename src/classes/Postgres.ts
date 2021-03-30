@@ -3,6 +3,7 @@ import pg  = require('pg');
 import dbTables = require('../database/tables');
 const client = pg.Client;
 let types = pg.types;
+
 /**This is setting 1114 into returning everything from psql 
  * as a json format that comes as a date. 
  */
