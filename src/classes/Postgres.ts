@@ -15,6 +15,7 @@ types.setTypeParser(1114, function(stringValue) {
 export default class Postgres {
     protected client;
     protected detailedMessage: Object;
+    views=[];
     
     constructor(){
         this.client = null;
@@ -125,8 +126,24 @@ export default class Postgres {
         await this.createViews()
     }
 
+    async insert(table_name:string,data:object){
+        let insertQuerie = `INSERT INTO ${table_name}`
+        let columns = Object.keys(data);
+        insertQuerie += `( ${columns.join()} ) values `;
+        insertQuerie += `( ${Object.values(data).join()} );`
+        return this.query(insertQuerie);
+    }
+
+    async update(table_name:string,){
+        
+    }
+
+    async delete(){
+
+    }
+
     close(){
         this.client.end();
     }
-    views=[];
+    
 }
