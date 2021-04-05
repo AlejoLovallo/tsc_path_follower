@@ -134,12 +134,18 @@ export default class Postgres {
         return this.query(insertQuerie);
     }
 
-    async update(table_name:string,){
-        
+    async update(table_name:string,data:object){
+        let insertQuerie =`UPDATE ${table_name} SET`;
+        for(const column in data){
+            if(column != 'filter' && column != 'filter_value'){
+                insertQuerie += `${column} = ${data[column]},`
+            }
+        }
+        insertQuerie += `WHERE ${data['filter']} = ${data['filter_value']};`
     }
 
     async delete(){
-
+        
     }
 
     close(){

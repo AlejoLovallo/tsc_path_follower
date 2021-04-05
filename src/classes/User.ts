@@ -1,29 +1,35 @@
 import { type } from "node:os";
+const bcrypt = require('bcrypt');
+import {saltRounds} from '../../utils/constants';
+
 
 enum Role{
-    STUDENT,
-    AUTHORITY,
-    ADMINISTRATOR,
+    STUDENT = "STUDENT",
+    AUTHORITY = "AUTHORITY",
+    ADMINISTRATOR = "ADMINISTRATOR",
+}
+
+function getRoleName(role_name:string):Role{
+    switch(role_name){
+        case 'STUDENT':
+            return Role.STUDENT;
+        case 'AUTHORITY':
+            return Role.AUTHORITY;
+        case 'ADMINISTRATOR':
+            return Role.ADMINISTRATOR;
+    }
 }
 
 interface isUser{
-
-     name:string;
-     password: string;
-     set_password:boolean;
-     role:Role;
-     phone:string;
-
      getName:()=>string;
-     getRole:()=>string;
+     getRole:()=>Role;
      getPhone:()=>string;
      hasSetPassword:()=>boolean;
 
      setName:(string)=>boolean;
      setRole:(string)=>boolean;
-     setPassword:(string)=>boolean;
+     setPassword:(string)=>void;
      setPhone:(string)=>boolean;
-
 }
 
 export default class User implements isUser{
@@ -31,7 +37,7 @@ export default class User implements isUser{
     public static table:string = 'users';
     private name:string;
     private password:string;
-    private set_password:boolean;
+    private set_password;
     private role:Role;
     private phone:string;
 
@@ -50,8 +56,8 @@ export default class User implements isUser{
     getName():string{
         return this.name;
     }
-    getRole():string{
-        return this.role.toString();
+    getRole(){
+        return getRoleName(this.role);
     }
     getPhone():string{
         return this.phone;
@@ -65,30 +71,23 @@ export default class User implements isUser{
         let res = false;
         if(new_name){
             this.name = new_name;
-            res = true;
+            return true;
         }
-        return true;
     }
     setRole(new_role:string):boolean{
-        let res = false;
         switch(new_role){
             case 'STUDENT':
                 this.role = Role.STUDENT;
-                res = true;
-                break;
+                return true;
             case 'ADMINISTRATOR':
                 this.role = Role.ADMINISTRATOR;
-                res = true;
-                break;
+                return true;
             case 'AUTHORITY':
                 this.role = Role.AUTHORITY;
-                res = true;
-                break;
+                return true;
             default:
-                res = false;
-                break;
+                return false;
         }
-        return res;
     }
     setPhone(new_phone:string):boolean{
         let res = false;
@@ -98,11 +97,22 @@ export default class User implements isUser{
         }
         return true;
     }
-    setPassword(new_password:string):boolean{
-        /**
-         * TODO: Hash password 
-         */
-        return true;
+
+    async hashPassword(password:string){
+        const salt = await bcrypt.genSalt(saltRounds);
+        return new Promise( resolve => {
+            bcrypt.hash(password,salt).then(
+                (hash) => {
+                resolve(hash)
+            })
+        });
+    }
+
+    async setPassword(new_password:string){
+        console.log("Entro aca");
+        const hashed_password = await this.hashPassword(new_password)
+        console.log(typeof(hashed_password)) 
+        console.log(hashed_password);
     }
 
 }
