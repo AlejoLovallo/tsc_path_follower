@@ -26,6 +26,20 @@ export default class Postgres {
         }
     }
 
+    async build(){
+        let _client = new Client({
+            user: process.env['DATABASE_USER'],
+            password: process.env['DATABASE_PASSWORD'],
+            host: process.env['DATABASE_HOST'],
+            database: process.env['DATABASE_DATABASE'],
+            port: process.env['DATABASE_PORT']
+        })
+        let connect = await _client.connect();
+        this.client = _client;
+        console.log("FINISHED!");
+        console.log(this.client);
+    }
+
     async initialize(){
         let _client = new Client({
             user: process.env['DATABASE_USER'],
@@ -36,8 +50,6 @@ export default class Postgres {
         })
         let connect = await _client.connect();
         this.client = _client;
-        console.log(_client);
-        console.log(client);
         await this.createTables()
     }
 
@@ -76,6 +88,16 @@ export default class Postgres {
                     this.views[viewIndex].query,
                     this.views[viewIndex].values)
             }catch(e){}
+        }
+    }
+
+    async createTable(table_data){
+        const createTableQuery = `CREATE TABLE ${table_data.table_name} (`;
+        for (const field in table_data){
+            if(field != 'table_name'){
+                const data = Object.keys(table_data[field])
+                console.log(data);
+            }
         }
     }
 
@@ -124,6 +146,10 @@ export default class Postgres {
             }
         }
         await this.createViews()
+    }
+
+    async dropTables(){
+           
     }
 
     async insert(table_name:string,data:object){

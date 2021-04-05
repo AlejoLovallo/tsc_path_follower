@@ -9,7 +9,6 @@ beforeEach(()=>{
 
 describe('User Positive tests',()=>{
 
-
     it('Create User',()=>{
         expect(user.getName()).toBe(completeUser.name);
         expect(user.getRole()).toBe(completeUser.role);
@@ -40,6 +39,8 @@ describe('User Positive tests',()=>{
         await user.setPassword(new_password);
         expect(user.hasSetPassword()).toBe(true);
     })
+})
 
-    
+describe('User negative tests',()=>{
+
 })
