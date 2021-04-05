@@ -16,5 +16,6 @@ describe('Postgress tests',()=>{
             phone:        {  type: 'string', lengths: userBoundaries.lengths.phone, couldBeUndefinedAtCreate: true, couldBeNullInDB:true                 },
         };
     })
+    
 })
 
