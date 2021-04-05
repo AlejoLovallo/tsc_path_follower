@@ -38,7 +38,8 @@ describe('User Positive tests',()=>{
     it('Create user and set password',async ()=>{
         let new_password = "new_password";
         await user.setPassword(new_password);
-        
+        expect(user.hasSetPassword()).toBe(true);
     })
 
+    
 })

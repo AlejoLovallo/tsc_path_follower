@@ -36,8 +36,8 @@ export default class User implements isUser{
     
     public static table:string = 'users';
     private name:string;
-    private password:string;
-    private set_password;
+    private password;
+    private set_password:boolean;
     private role:Role;
     private phone:string;
 
@@ -97,7 +97,6 @@ export default class User implements isUser{
         }
         return true;
     }
-
     async hashPassword(password:string){
         const salt = await bcrypt.genSalt(saltRounds);
         return new Promise( resolve => {
@@ -107,12 +106,10 @@ export default class User implements isUser{
             })
         });
     }
-
     async setPassword(new_password:string){
-        console.log("Entro aca");
         const hashed_password = await this.hashPassword(new_password)
-        console.log(typeof(hashed_password)) 
-        console.log(hashed_password);
+        this.password = hashed_password;
+        this.set_password = true;
     }
-
+    
 }
